@@ -11,6 +11,8 @@
   "source": {
     "format": "3.0 (quilt)",
     "version": "1.6.37-2",
+    "publication": "https://api.launchpad.net/1.0/ubuntu/+archive/primary/+sourcepub/10994332",
+    "publishedAt": "2020-02-13T09:28:13.178414+00:00",
     "descriptor": {
       "name": "libpng1.6_1.6.37-2.dsc",
       "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/libpng1.6/1.6.37-2/libpng1.6_1.6.37-2.dsc",
