@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 3,
+  "patches": [
+    {
+      "id": "cve-2025-65018-final-with-cve-2026-22695-fix",
+      "kind": "security",
+      "file": "CVE-2025-65018.patch",
+      "sha256": "6d530e960b4f4ed73034f12a20d505be9b545b4e917d83a09c6c50b74ac91ea4",
+      "title": "Safely decode interlaced 16-to-8-bit reads and preserve Adam7 accumulation",
+      "description": "Backports the final upstream CVE-2025-65018 implementation and its CVE-2026-22695 bounds correction, with the accumulated-row correction reported in upstream issue #853.",
+      "cves": ["CVE-2025-65018"],
+      "upstream": {
+        "repository": "https://github.com/pnggroup/libpng",
+        "commit": "218612ddd6b17944e21eda56caf8b4bf7779d1ea",
+        "url": "https://github.com/pnggroup/libpng/commit/218612ddd6b17944e21eda56caf8b4bf7779d1ea",
+        "followUpCommits": [
+          "e4f7ad4ea2a471776c81dda4846b7691925d9786"
+        ]
+      },
+      "appliesTo": [
+        { "target": "ubuntu-focal-amd64", "sourceVersion": "1.6.37-2" }
+      ],
+      "dep3": {
+        "origin": "Backport of upstream commits 218612d and e4f7ad4, plus the Adam7 accumulated-row correction reported in upstream issue #853.",
+        "forwarded": "https://github.com/pnggroup/libpng/issues/853",
+        "lastUpdate": "2026-10-30"
+      },
+      "tests": [
+        {
+          "id": "simplified-read-adam7-16-to-8",
+          "runner": "getpatched/platform:verification/regression.py (read-interlaced-rgba.c under Valgrind)",
+          "fixtures": [
+            {"path": "tests/fixtures/adam7-rgb16.png", "sha256": "6b0e6e813b6f824a1789c6c13fa7739c705fc82609e42d82b31bd44d0d07003c"}
+          ],
+          "baselineExpectation": "A valid interlaced 16-bit PNG read into a 4-byte-per-pixel output buffer reproduces the reported overwrite under a memory checker on the exact vulnerable Focal package.",
+          "patchedExpectation": "The installed patched library completes the same read without an out-of-bounds write and preserves decoded pixel values."
+        },
+        {
+          "id": "simplified-read-adam7-pixel-accumulation",
+          "runner": "tests/compare-interlaced-read.c",
+          "fixtures": [
+            {
+              "path": "tests/fixtures/adam7-rgb16.png",
+              "sha256": "6b0e6e813b6f824a1789c6c13fa7739c705fc82609e42d82b31bd44d0d07003c"
+            },
+            {
+              "path": "tests/fixtures/flat-rgb16.png",
+              "sha256": "306a94d66189ffe9889aa2fa66a5df3dae7838fcfb9b48acc3c58f90c3ed9c31"
+            }
+          ],
+          "baselineExpectation": "On the exact vulnerable source, reading these equivalent Adam7 and flat 16-bit RGB fixtures to 8-bit RGB yields identical pixels.",
+          "patchedExpectation": "The installed patched library preserves the same decoded pixels across all Adam7 passes; no channels differ from the flat reference."
+        },
+        {
+          "id": "CVE-2026-22695-padded-stride-follow-up",
+          "runner": "getpatched/platform:verification/regression.py (read-padded-stride.c under Valgrind)",
+          "fixtures": [
+            {"path": "tests/fixtures/adam7-rgb16.png", "sha256": "6b0e6e813b6f824a1789c6c13fa7739c705fc82609e42d82b31bd44d0d07003c"}
+          ],
+          "baselineExpectation": "The vulnerable final-CVE patch sequence overreads local_row for padded stride or fails for negative stride under a memory checker.",
+          "patchedExpectation": "The installed patched library copies only the local row bytes and honors padded and negative caller strides without an out-of-bounds read."
+        }
+      ]
+    },
+    {
+      "id": "cve-2026-22801",
+      "kind": "security",
+      "file": "CVE-2026-22801.patch",
+      "sha256": "6ced9ef3fdbefaeb45c8cd272ab75152c22fa2345e040e65d229de75de0413a5",
+      "title": "Preserve ptrdiff_t row strides in simplified PNG writes",
+      "description": "Backports upstream commit cf155de to avoid truncating large or negative row strides in the simplified write API.",
+      "cves": ["CVE-2026-22801"],
+      "upstream": {
+        "repository": "https://github.com/pnggroup/libpng",
+        "commit": "cf155de014fc6c5cb199dd681dd5c8fb70429072",
+        "url": "https://github.com/pnggroup/libpng/commit/cf155de014fc6c5cb199dd681dd5c8fb70429072"
+      },
+      "appliesTo": [
+        { "target": "ubuntu-focal-amd64", "sourceVersion": "1.6.37-2" }
+      ],
+      "dep3": {
+        "origin": "Backport of the upstream simplified-write row-stride fix.",
+        "forwarded": "not-needed",
+        "lastUpdate": "2026-10-30"
+      },
+      "tests": [
+        {
+          "id": "simplified-write-large-and-negative-stride",
+          "runner": "getpatched/platform:verification/regression.py (write-negative-stride.c under Valgrind)",
+          "fixtures": [
+            {"path": "tests/fixtures/adam7-rgb16.png", "sha256": "6b0e6e813b6f824a1789c6c13fa7739c705fc82609e42d82b31bd44d0d07003c"}
+          ],
+          "baselineExpectation": "The exact vulnerable Focal package fails the large or negative row-stride probe under a memory checker.",
+          "patchedExpectation": "The installed patched library writes valid output for the same probes without out-of-bounds access."
+        }
+      ]
+    }
+  ]
+}

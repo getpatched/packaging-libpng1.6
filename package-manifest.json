@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 3,
+  "project": {
+    "name": "GetPatched",
+    "repository": "getpatched/packaging-libpng1.6",
+    "description": "Target-specific public maintenance recipe for libpng1.6."
+  },
+  "package": {
+    "source": "libpng1.6",
+    "description": "PNG reference library and command-line tools.",
+    "upstreamProject": "libpng",
+    "upstreamRepository": "https://github.com/pnggroup/libpng",
+    "copyrightFile": "LICENSES/ubuntu-source-copyright"
+  },
+  "targets": [
+    { "id": "ubuntu-focal-amd64", "file": "targets/ubuntu/focal-amd64.json" }
+  ],
+  "patchMetadata": "patches/metadata.json",
+  "regressionTests": {
+    "fixturesDirectory": "tests/fixtures",
+    "runner": "getpatched/platform:verification/regression.py"
+  },
+  "licensing": {
+    "publicContributionsSpdx": "MIT",
+    "publicContributionsLicenseFile": "LICENSE",
+    "earlyBinaryLicenseId": null,
+    "earlyBinaryTermsFile": null,
+    "upstreamCopyrightFile": "LICENSES/ubuntu-source-copyright",
+    "upstreamLicenses": "preserve"
+  }
+}

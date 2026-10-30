@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 2,
+  "id": "ubuntu-focal-amd64",
+  "base": {
+    "distribution": "Ubuntu",
+    "release": "20.04",
+    "codename": "focal",
+    "sourcePocket": "release",
+    "architecture": "amd64"
+  },
+  "source": {
+    "format": "3.0 (quilt)",
+    "version": "1.6.37-2",
+    "descriptor": {
+      "name": "libpng1.6_1.6.37-2.dsc",
+      "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/libpng1.6/1.6.37-2/libpng1.6_1.6.37-2.dsc",
+      "sha256": "4567a54b5804e068e61477e9cd78346557b85b72add10ef10f130a5be169662e",
+      "bytes": 2225
+    },
+    "files": [
+      {
+        "name": "libpng1.6_1.6.37.orig.tar.gz",
+        "role": "upstream-source",
+        "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/libpng1.6/1.6.37-2/libpng1.6_1.6.37.orig.tar.gz",
+        "sha256": "ca74a0dace179a8422187671aee97dd3892b53e168627145271cad5b5ac81307",
+        "bytes": 1508805
+      },
+      {
+        "name": "libpng1.6_1.6.37-2.debian.tar.xz",
+        "role": "ubuntu-packaging",
+        "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/libpng1.6/1.6.37-2/libpng1.6_1.6.37-2.debian.tar.xz",
+        "sha256": "097cee0f0da4013d0231d37e090204ab3fa592b4fecdaaed3fca8d13affcaae8",
+        "bytes": 31844
+      }
+    ],
+    "signatureVerification": {
+      "verified": false,
+      "note": "The signed Ubuntu source index authenticates these descriptor and archive hashes; individual .dsc and upstream archive signatures have not yet been verified."
+    }
+  },
+  "supportedSourceVersions": ["1.6.37-2"],
+  "packageVersion": "1.6.37-2+getpatched1",
+  "releaseSerial": 1,
+  "changelog": {
+    "distribution": "focal",
+    "urgency": "medium",
+    "maintainer": "GetPatched Maintainers <packages@getpatched.dev>",
+    "date": "Fri, 30 Oct 2026 00:00:00 +0000"
+  },
+  "binaryPackages": ["libpng16-16", "libpng-dev", "libpng-tools"],
+  "patches": ["cve-2025-65018-final-with-cve-2026-22695-fix", "cve-2026-22801"],
+  "buildPatches": [],
+  "releaseAccess": {
+    "policy": "public-after-checks",
+    "sponsorDelayHours": 0,
+    "sponsorEligibility": null,
+    "earlyBinaryLicenseId": null,
+    "publicContributionSpdx": "MIT",
+    "earlyUse": ["private", "commercial"],
+    "earlyRedistributionAllowed": false,
+    "publicLicenseScope": "getpatched-authored-contributions-only"
+  },
+  "status": "unreleased-development-candidate"
+}
