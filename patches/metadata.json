@@ -32,7 +32,7 @@
           "fixtures": [
             {"path": "tests/fixtures/adam7-rgb16.png", "sha256": "6b0e6e813b6f824a1789c6c13fa7739c705fc82609e42d82b31bd44d0d07003c"}
           ],
-          "baselineExpectation": "A valid interlaced 16-bit PNG read into a 4-byte-per-pixel output buffer reproduces the reported overwrite under a memory checker on the exact vulnerable Focal package.",
+          "baselineExpectation": "The Focal 1.6.37-2 source with Ubuntu's patch series must reproduce an out-of-bounds write for this valid interlaced 16-bit to 8-bit read. The current source-level probe exits cleanly, so this target is not verified and must not be released for this CVE.",
           "patchedExpectation": "The installed patched library completes the same read without an out-of-bounds write and preserves decoded pixel values."
         },
         {
@@ -85,13 +85,10 @@
       },
       "tests": [
         {
-          "id": "simplified-write-large-and-negative-stride",
-          "runner": "getpatched/platform:verification/regression.py (write-negative-stride.c under Valgrind)",
-          "fixtures": [
-            {"path": "tests/fixtures/adam7-rgb16.png", "sha256": "6b0e6e813b6f824a1789c6c13fa7739c705fc82609e42d82b31bd44d0d07003c"}
-          ],
-          "baselineExpectation": "The exact vulnerable Focal package fails the large or negative row-stride probe under a memory checker.",
-          "patchedExpectation": "The installed patched library writes valid output for the same probes without out-of-bounds access."
+          "id": "simplified-write-negative-linear-stride",
+          "runner": "getpatched/platform:verification/regression.py (write-negative-stride.c under a memory checker)",
+          "baselineExpectation": "The Focal 1.6.37-2 source with Ubuntu's patch series overreads input while writing 16-bit linear RGBA rows with a negative row stride; this reproduces in the retained native source test.",
+          "patchedExpectation": "The same write call completes without an out-of-bounds read under a memory checker on the candidate source."
         }
       ]
     }
