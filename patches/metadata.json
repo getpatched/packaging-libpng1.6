@@ -30,9 +30,9 @@
           "id": "simplified-read-adam7-16-to-8",
           "runner": "getpatched/platform:verification/regression.py (read-interlaced-rgba.c with a guarded output buffer under Valgrind)",
           "fixtures": [
-            {"path": "tests/fixtures/adam7-rgb16.png", "sha256": "6b0e6e813b6f824a1789c6c13fa7739c705fc82609e42d82b31bd44d0d07003c"}
+            {"path": "tests/fixtures/cve-2025-65018-advisory-adam7-rgb16.png", "sha256": "9deb34ada9b550df50181e4cd8c947303fd7b2881f61f3f16efa249d845e9905"}
           ],
-          "baselineExpectation": "The exact installed Focal 1.6.37-2 library overwrites the sentinel region beyond PNG_IMAGE_SIZE for this valid RGB16 Adam7 to RGBA8 read and reports result=overrun:output-buffer.",
+          "baselineExpectation": "Pending/unverified: the exact installed Focal 1.6.37-2 library must overwrite the sentinel region beyond PNG_IMAGE_SIZE for the 32x32 RGB16 Adam7 to RGBA8 read and report result=overrun:output-buffer. Do not count this CVE as verified unless the pinned fixture reproduces that result on the exact installed baseline.",
           "patchedExpectation": "The exact installed patched library reports result=within-output-buffer; its separate Adam7 comparison also preserves decoded pixel values."
         },
         {
