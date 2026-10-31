@@ -28,12 +28,12 @@
       "tests": [
         {
           "id": "simplified-read-adam7-16-to-8",
-          "runner": "getpatched/platform:verification/regression.py (read-interlaced-rgba.c under Valgrind)",
+          "runner": "getpatched/platform:verification/regression.py (read-interlaced-rgba.c with a guarded output buffer under Valgrind)",
           "fixtures": [
             {"path": "tests/fixtures/adam7-rgb16.png", "sha256": "6b0e6e813b6f824a1789c6c13fa7739c705fc82609e42d82b31bd44d0d07003c"}
           ],
-          "baselineExpectation": "The Focal 1.6.37-2 source with Ubuntu's patch series must reproduce an out-of-bounds write for this valid interlaced 16-bit to 8-bit read. The current source-level probe exits cleanly, so this target is not verified and must not be released for this CVE.",
-          "patchedExpectation": "The installed patched library completes the same read without an out-of-bounds write and preserves decoded pixel values."
+          "baselineExpectation": "The exact installed Focal 1.6.37-2 library overwrites the sentinel region beyond PNG_IMAGE_SIZE for this valid RGB16 Adam7 to RGBA8 read and reports result=overrun:output-buffer.",
+          "patchedExpectation": "The exact installed patched library reports result=within-output-buffer; its separate Adam7 comparison also preserves decoded pixel values."
         },
         {
           "id": "simplified-read-adam7-pixel-accumulation",
