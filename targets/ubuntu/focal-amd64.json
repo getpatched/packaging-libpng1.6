@@ -40,17 +40,25 @@
       "note": "The signed Ubuntu source index authenticates these descriptor and archive hashes; individual .dsc and upstream archive signatures have not yet been verified."
     }
   },
-  "supportedSourceVersions": ["1.6.37-2"],
-  "packageVersion": "1.6.37-2+getpatched1",
-  "releaseSerial": 1,
+  "supportedSourceVersions": [
+    "1.6.37-2"
+  ],
+  "packageVersion": "1.6.37-2+getpatched2",
+  "releaseSerial": 2,
   "changelog": {
     "distribution": "focal",
     "urgency": "medium",
     "maintainer": "GetPatched Maintainers <packages@getpatched.dev>",
-    "date": "Fri, 30 Oct 2026 00:00:00 +0000"
+    "date": "Thu, 12 Nov 2026 00:00:00 +0000"
   },
-  "binaryPackages": ["libpng16-16", "libpng-dev", "libpng-tools"],
-  "patches": ["cve-2025-65018-final-with-cve-2026-22695-fix", "cve-2026-22801"],
+  "binaryPackages": [
+    "libpng16-16",
+    "libpng-dev",
+    "libpng-tools"
+  ],
+  "patches": [
+    "cve-2026-22801"
+  ],
   "buildPatches": [],
   "releaseAccess": {
     "policy": "public-after-checks",
@@ -58,7 +66,10 @@
     "sponsorEligibility": null,
     "earlyBinaryLicenseId": null,
     "publicContributionSpdx": "MIT",
-    "earlyUse": ["private", "commercial"],
+    "earlyUse": [
+      "private",
+      "commercial"
+    ],
     "earlyRedistributionAllowed": false,
     "publicLicenseScope": "getpatched-authored-contributions-only"
   },

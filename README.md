@@ -1,6 +1,6 @@
 # GetPatched recipe: libpng1.6
 
-GetPatched maintains target-specific backports for public distribution source packages. This repository contains the recipe, patch metadata, regression inputs, and license notices; it does not replace the distribution package with an unrelated upstream release.
+GetPatched carries target-specific fixes on top of the exact Ubuntu source package. This branch isolates the Focal amd64 backport for CVE-2026-22801.
 
 ## Candidate target
 
@@ -8,27 +8,25 @@ GetPatched maintains target-specific backports for public distribution source pa
 |---|---|
 | Target | Ubuntu 20.04 LTS (Focal), amd64 |
 | Pinned source | `libpng1.6` `1.6.37-2` |
-| Candidate package version | `1.6.37-2+getpatched1` |
-| Requested fixes | CVE-2025-65018, CVE-2026-22695, CVE-2026-22801 |
+| Candidate package version | `1.6.37-2+getpatched2` |
+| Included CVE | CVE-2026-22801 |
 | Access | Free and public immediately after all release checks |
-| Release state | Development candidate; no binary is published |
+| Release state | Unverified development candidate; no binary is published |
 
-Debian and other Ubuntu targets are intentionally absent until current signed source indexes, vendor advisories, exact-source applicability, and installed-package checks establish a vulnerable target. No Ubuntu Pro or ESM source or binary is used. This repository does not claim support for arm64.
+## Scope and patch
+
+This target applies only `cve-2026-22801`, upstream commit [`cf155de`](https://github.com/pnggroup/libpng/commit/cf155de014fc6c5cb199dd681dd5c8fb70429072). It prevents narrowing caller-supplied `ptrdiff_t` row strides in the simplified PNG write API. The exact installed Focal baseline reproduces an invalid read in `png_image_write_to_file` on a negative-stride write. The installed candidate must pass the same Memcheck probe.
+
+CVE-2025-65018 and CVE-2026-22695 are not included or claimed by this isolated target; their exact baseline evidence is incomplete. The repository's retained historical fixtures and unreferenced patch file do not enter this target's recipe because `targets/ubuntu/focal-amd64.json` selects only `cve-2026-22801`.
 
 ## Recipe layout
 
-`package-manifest.json` indexes target and patch metadata. `targets/ubuntu/focal-amd64.json` pins the complete Ubuntu source package by exact version, URLs, sizes, and SHA-256 values from the signed-index preflight. `patches/metadata.json` records upstream commits, affected source versions, patch hashes, CVEs, and the required baseline and patched regressions. The source copyright file is retained under `LICENSES/`.
-
-## Patch status
-
-The CVE-2025-65018 candidate uses the final upstream rearchitecture (`218612d`), not the superseded preliminary depth-rejection patch. It includes the follow-up `e4f7ad4` correction for CVE-2026-22695 because that follow-up fixes an over-read introduced by the final CVE-65018 implementation. It also restores each accumulated Adam7 output row before reading later passes, addressing the pixel corruption reported in upstream issue #853. CVE-2026-22801 is tracked separately through upstream commit `cf155de`.
-
-The recipe contains installed-image probes for CVE-2025-65018, the CVE-2026-22695 padded-stride follow-up, CVE-2026-22801 negative-stride access, and Adam7 pixel preservation. The first generated 32×32 RGB16 Adam7 image did not reproduce CVE-2025-65018 on the exact Focal source baseline. The second fixture follows the 32×32 RGB16 Adam7 input described in the [upstream advisory](https://github.com/pnggroup/libpng/security/advisories/GHSA-7wv6-48j4-hj3g). Recreate it with `python3 tests/generate-cve-2025-65018.py tests/fixtures/cve-2025-65018-advisory-adam7-rgb16.png`; the recipe pins its SHA-256. This generator uses only Python's standard library and writes a deterministic PNG. Its exact installed Focal baseline result is pending. Until that baseline reproduces, no CVE-2025-65018 fix claim is made. A corrected native ASan probe for CVE-2026-22801 reproduces a heap-buffer-overflow read on the Ubuntu-patched source and exits cleanly with the GetPatched patch; this remains source-level evidence, not an installed-package result. The Adam7 pixel comparison previously exposed corruption from the uncorrected upstream helper, motivating the row-restore correction. No target is verified or published until exact-package baseline reproduction, patched regressions, builds, fixed-database scans, and signed public APT client checks pass.
-
-## Licensing
-
-GetPatched-authored recipe files, patches, tests, and documentation are MIT-licensed. Upstream libpng and Ubuntu packaging retain their original licenses and notices; the MIT license does not replace those obligations. No sponsor-only access or binary license applies to this package.
+`package-manifest.json` indexes the target and metadata. The target pins source `1.6.37-2` and its Focal source archives by the signed public source-index hashes. `patches/metadata.json` records the upstream commit, patch hash, exact target applicability, and installed baseline/patched regression expectations. Ubuntu source notices and copyright remain preserved under `LICENSES/`.
 
 ## Build and verification
 
-Use the shared `getpatched/platform` build tooling after this target is wired into its supported target and public-release workflows. A clean build must prove the vulnerable installed baseline, patched installed regressions, normal consumers, package-aware scans against a fixed database, signed repository metadata, anonymous binary installation, and source retrieval on a fresh client. The current candidate is not enabled for production publication.
+Build from the pinned Focal source in a clean amd64 environment. Acceptance requires the exact installed baseline failure and candidate success, Ubuntu package tests, consumer compatibility, fixed-database package-aware before/after scans, signed isolated APT installation and source retrieval, hosted CI, independent review, and intended-branch merge. Keep production release eligibility false until every gate passes. Do not publish candidate binaries, indexes, or releases from this branch.
+
+## Licensing
+
+GetPatched-authored recipe files, patch, tests, and documentation are MIT-licensed. Preserve Ubuntu and upstream libpng notices and licensing. No sponsor-only access or binary license applies to this public package stream.
