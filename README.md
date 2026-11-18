@@ -32,3 +32,5 @@ GetPatched-authored recipe files, patches, tests, and documentation are MIT-lice
 ## Build and verification
 
 Use the shared `getpatched/platform` build tooling after this target is wired into its supported target and public-release workflows. A clean build must prove the vulnerable installed baseline, patched installed regressions, normal consumers, package-aware scans against a fixed database, signed repository metadata, anonymous binary installation, and source retrieval on a fresh client. The current candidate is not enabled for production publication.
+
+[![advertisement](https://ads.servead.net/i/53d61ca8-3670-4835-a177-d34fdd893219.svg)](https://ads.servead.net/c/53d61ca8-3670-4835-a177-d34fdd893219)
